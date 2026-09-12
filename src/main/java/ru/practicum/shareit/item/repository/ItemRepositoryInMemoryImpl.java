@@ -42,7 +42,7 @@ public class ItemRepositoryInMemoryImpl implements ItemRepository {
 
     @Override
     public Item create(Item item) {
-        idCount++;
+        updateIdCount();
         item.setId(idCount);
         items.add(item);
         return item;
@@ -59,5 +59,9 @@ public class ItemRepositoryInMemoryImpl implements ItemRepository {
         }
         itemToUpdate.setAvailable(item.isAvailable());
         return itemToUpdate;
+    }
+
+    private static void updateIdCount() {
+        idCount++;
     }
 }

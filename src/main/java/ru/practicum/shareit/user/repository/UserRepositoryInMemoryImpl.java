@@ -32,7 +32,7 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
         if (findByEmail(user.getEmail()).isPresent()) {
             throw new DuplicatedDataException("Такой email уже используется");
         }
-        idCount++;
+        updateIdCount();
         user.setId(idCount);
         users.add(user);
         return user;
@@ -63,5 +63,9 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
         return users.stream()
                 .filter(user -> user.getEmail().equals(email))
                 .findAny();
+    }
+
+    private static void updateIdCount() {
+        idCount++;
     }
 }
