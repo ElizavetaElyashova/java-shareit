@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class UserRepositoryInMemoryImpl implements UserRepository{
+public class UserRepositoryInMemoryImpl implements UserRepository {
     private final List<User> users;
     private static long idCount;
 
