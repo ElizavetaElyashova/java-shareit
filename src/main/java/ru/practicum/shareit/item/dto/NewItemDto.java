@@ -5,18 +5,14 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Data
 @AllArgsConstructor
-public class ItemDto {
+public class NewItemDto {
     private long id;
     @NotBlank
     private String name;
-    @NotBlank
     @Size(message = "Максимальная длина описания 500 символов", max = 500)
     private String description;
-    @NotBlank
-    private String available;
+    private boolean available;
+    private long ownerId;
 }
