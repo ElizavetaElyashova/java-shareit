@@ -35,7 +35,7 @@ public class ItemRepositoryInMemoryImpl implements ItemRepository {
             String searchText = text.toUpperCase();
             return items.stream()
                     .filter(item -> item.getName().toUpperCase().contains(searchText) || item.getDescription().toUpperCase().contains(searchText))
-                    .filter(Item::isAvailable)
+                    .filter(Item::getAvailable)
                     .toList();
         }
     }
@@ -57,7 +57,7 @@ public class ItemRepositoryInMemoryImpl implements ItemRepository {
         if (item.getDescription() != null) {
             itemToUpdate.setDescription(item.getDescription());
         }
-        itemToUpdate.setAvailable(item.isAvailable());
+        itemToUpdate.setAvailable(item.getAvailable());
         return itemToUpdate;
     }
 

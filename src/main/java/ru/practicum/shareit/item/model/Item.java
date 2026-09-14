@@ -20,6 +20,6 @@ public class Item {
     @Size(message = "Максимальная длина описания 500 символов", max = 500)
     private String description;
     private User owner;
-    private boolean available;
+    private Boolean available;
     private ItemRequest request;
 }

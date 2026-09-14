@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemDto;
+import ru.practicum.shareit.item.exception.AccessForbiddenException;
 import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
 
@@ -16,11 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public List<ItemDto> findUserItems(long userId) {
-        userService.findById(userId);
+        userRepository.findById(userId);
         return itemRepository.findUserItems(userId).stream()
                 .map(ItemMapper::toItemDto)
                 .toList();
@@ -33,13 +34,17 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public NewItemDto create(ItemDto itemDto, long userId) {
-        User owner = UserMapper.toUser(userService.findById(userId));
+        User owner = userRepository.findById(userId);
         return ItemMapper.toNewItemDto(itemRepository.create(ItemMapper.toItem(itemDto, owner)));
     }
 
     @Override
     public ItemDto update(ItemDto itemDto, long userId) {
-        User owner = UserMapper.toUser(userService.findById(userId));
+        Item item = itemRepository.findById(itemDto.getId());
+        User owner = userRepository.findById(userId);
+        if (!item.getOwner().equals(owner)) {
+            throw new AccessForbiddenException("Пользователь не является владельцем вещи");
+        }
         return ItemMapper.toItemDto(itemRepository.update(ItemMapper.toItem(itemDto, owner)));
     }
 

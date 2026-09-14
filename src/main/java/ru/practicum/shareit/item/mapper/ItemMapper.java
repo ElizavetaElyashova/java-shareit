@@ -11,7 +11,7 @@ public class ItemMapper {
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
-                String.valueOf(item.isAvailable())
+                item.getAvailable()
         );
     }
 
@@ -20,7 +20,7 @@ public class ItemMapper {
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
-                item.isAvailable(),
+                item.getAvailable(),
                 item.getOwner().getId()
         );
     }
@@ -31,7 +31,7 @@ public class ItemMapper {
                 itemDto.getName(),
                 itemDto.getDescription(),
                 owner,
-                itemDto.getAvailable() != null && itemDto.getAvailable().equals("true"),
+                itemDto.getAvailable(),
                 null
         );
     }

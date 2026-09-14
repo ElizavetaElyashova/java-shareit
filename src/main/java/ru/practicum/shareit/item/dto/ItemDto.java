@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,6 @@ public class ItemDto {
     @NotBlank
     @Size(message = "Максимальная длина описания 500 символов", max = 500)
     private String description;
-    @NotBlank
-    private String available;
+    @NotNull
+    private Boolean available;
 }
