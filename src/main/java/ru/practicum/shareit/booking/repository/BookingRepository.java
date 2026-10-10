@@ -7,13 +7,14 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     Booking save(Booking booking);
 
-    @Query("select new ru.practicum.shareit.booking.dto.BookingDatesDto(b.start, b.end) " +
+    @Query("select new ru.practicum.shareit.booking.dto.BookingDatesDto(i.id, b.start, b.end) " +
             "from Booking b " +
             "join b.item as i " +
             "where i.id = ?1 " +
@@ -30,10 +31,23 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "limit 1")
     BookingDatesDto findNextBookingForItem(long itemId, LocalDateTime now);
 
+    @Query("select i.id, b.start, b.end from Booking b " +
+            "join b.item as i " +
+            "where i.id in ?1 " +
+            "and b.start > ?2 ")
+    List<BookingDatesDto> findNextBookingForItems(Collection<Long> itemIds, LocalDateTime now);
+
+    @Query("select new ru.practicum.shareit.booking.dto.BookingDatesDto(i. id, b.start, b.end) " +
+            "from Booking b " +
+            "join b.item as i " +
+            "where i.id in ?1 " +
+            "and b.end < ?2 ")
+    List<BookingDatesDto> findLastBookingForItems(Collection<Long> itemIds, LocalDateTime now);
+
 
     Optional<Booking> findById(Long id);
 
-    Optional<Booking> findByBookerIdAndItemIdAndEndIsBefore(long bookerId, long itemId, LocalDateTime end);
+    List<Booking> findByBookerIdAndItemIdAndEndIsBefore(long bookerId, long itemId, LocalDateTime end);
 
     List<Booking> findByBookerIdOrderByStartDesc(Long bookerId);
 

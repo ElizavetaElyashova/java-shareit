@@ -35,7 +35,8 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto create(NewBookingRequestDto newBooking, long userId) {
         Item item = itemRepository.findById(newBooking.getItemId()).orElseThrow(() -> new NoSuchElementException("Вещь не найдена."));
         User booker = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("Пользователь не найден."));
-        if (newBooking.getStart().equals(newBooking.getEnd())) {
+        if (newBooking.getStart().equals(newBooking.getEnd())
+                || newBooking.getStart().isAfter(newBooking.getEnd())) {
             throw new IllegalDateException("Дата конца бронирования не может совпадать с датой начала.");
         }
         if (!item.getAvailable()) {
@@ -60,8 +61,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto findById(long bookingId) {
-        return BookingMapper.toBookingDto(bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("Бронирование не найдено.")));
+    public BookingDto findById(long bookingId, long userId) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("Бронирование не найдено."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("Пользователь не найден."));
+        if (!booking.getBooker().equals(user) && !booking.getItem().getOwner().equals(user)) {
+            throw new AccessForbiddenException("Бронирование может посмотреть только владелец вещи или автор бронирования.");
+        }
+        return BookingMapper.toBookingDto(booking);
     }
 
     @Override

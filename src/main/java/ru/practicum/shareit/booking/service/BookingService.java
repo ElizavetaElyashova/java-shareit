@@ -11,7 +11,7 @@ public interface BookingService {
 
     BookingDto setStatus(boolean approved, long bookingId, long userId);
 
-    BookingDto findById(long bookingId);
+    BookingDto findById(long bookingId, long userId);
 
     List<BookingDto> findAll(long userId, State state);
 

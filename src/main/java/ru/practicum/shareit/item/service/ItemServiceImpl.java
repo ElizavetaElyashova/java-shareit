@@ -2,9 +2,11 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDatesDto;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -20,13 +22,13 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(propagation = Propagation.NESTED)
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
@@ -35,13 +37,32 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> findUserItems(long userId) {
-        userRepository.findById(userId);
-        return itemRepository.findItemsByOwnerId(userId).stream()
-                .map(item -> ItemMapper.toItemDto(item,
-                        bookingRepository.findLastBookingForItem(item.getId(), LocalDateTime.now()),
-                        bookingRepository.findNextBookingForItem(item.getId(), LocalDateTime.now()),
-                        findItemComments(item.getId())))
-                .toList();
+        userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("Пользователь не найден."));
+        Map<Long, Item> items = itemRepository.findItemsByOwnerId(userId).stream()
+                .collect(Collectors.toMap(Item::getId, Function.identity()));
+        Set<Long> itemsIds = items.keySet();
+        Map<Long, BookingDatesDto> lastBookings = bookingRepository.findLastBookingForItems(itemsIds, LocalDateTime.now())
+                .stream()
+                .collect(Collectors.toMap(BookingDatesDto::getItemId, Function.identity()));
+        Map<Long, BookingDatesDto> nextBookings = bookingRepository.findNextBookingForItems(itemsIds, LocalDateTime.now())
+                .stream()
+                .collect(Collectors.toMap(BookingDatesDto::getItemId, Function.identity()));
+        List<Comment> comments = commentRepository.findByItemIdIn(itemsIds);
+        Map<Long, List<CommentDto>> commentsByItem = new HashMap<>();
+        for (Comment comment : comments) {
+            commentsByItem.getOrDefault(comment.getItem().getId(), new ArrayList<>()).add(CommentDto.from(comment));
+        }
+        List<ItemDto> itemDtos = new ArrayList<>();
+        for (Long id : itemsIds) {
+            itemDtos.add(
+                    ItemMapper.toItemDto(
+                            items.get(id),
+                            lastBookings.get(id),
+                            nextBookings.get(id),
+                            commentsByItem.get(id))
+            );
+        }
+        return itemDtos;
 
     }
 
@@ -104,8 +125,13 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto addComment(CommentDto commentDto, long itemId, long userId) {
         User author = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("Пользователь не найден."));
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NoSuchElementException("Вещь не найдена."));
-        Optional<Booking> booking = bookingRepository.findByBookerIdAndItemIdAndEndIsBefore(userId, itemId, LocalDateTime.now());
-        if (booking.isPresent()) {
+        List<Booking> bookings = bookingRepository.findByBookerIdAndItemIdAndEndIsBefore(userId, itemId, LocalDateTime.now());
+        Optional<Booking> booking = bookings.stream()
+                .filter(b -> !b.getStatus().equals(Status.REJECTED) && !b.getStatus().equals(Status.WAITING))
+                .findAny();
+        if (booking.isPresent()
+                && !booking.get().getStatus().equals(Status.REJECTED)
+                && !booking.get().getStatus().equals(Status.WAITING)) {
             Comment comment = Comment.builder()
                     .text(commentDto.getText())
                     .author(author)
