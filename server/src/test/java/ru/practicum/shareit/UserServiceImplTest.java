@@ -11,7 +11,6 @@ import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserService;
-import ru.practicum.shareit.user.service.UserServiceImpl;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -20,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToObject;
 import static org.hamcrest.Matchers.hasSize;
 
-@SpringBootTest(classes = UserServiceImpl.class)
+@SpringBootTest
 @ActiveProfiles("test")
 public class UserServiceImplTest {
     @Autowired

@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToObject;
 import static org.hamcrest.Matchers.hasSize;
 
-@SpringBootTest(classes = ItemRequestServiceImpl.class)
+@SpringBootTest
 @ActiveProfiles("test")
 public class ItemRequestImplTest {
     @Autowired
