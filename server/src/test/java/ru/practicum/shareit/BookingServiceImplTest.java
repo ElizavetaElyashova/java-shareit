@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.equalToObject;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Transactional
 public class BookingServiceImplTest {
     @Autowired
     private BookingService bookingService;
