@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.*;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
@@ -29,17 +31,23 @@ public class ItemRequestImplTest {
     @Autowired
     ItemRequestService itemRequestService;
     @Autowired
-    ItemRequestRepository itemRequestRepository;
-    @Autowired
     private ItemRepository itemRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    ItemRequestRepository itemRequestRepository;
     private User user1;
     private User user2;
     private Item item1;
 
     @BeforeEach
     void beforeEach() {
+        commentRepository.deleteAll();
+        bookingRepository.deleteAll();
         itemRepository.deleteAll();
         itemRequestRepository.deleteAll();
         userRepository.deleteAll();

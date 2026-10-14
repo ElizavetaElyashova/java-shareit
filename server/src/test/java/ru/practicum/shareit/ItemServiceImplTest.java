@@ -51,10 +51,10 @@ public class ItemServiceImplTest {
 
     @BeforeEach
     void beforeEach() {
-        itemRequestRepository.deleteAll();
         commentRepository.deleteAll();
         bookingRepository.deleteAll();
         itemRepository.deleteAll();
+        itemRequestRepository.deleteAll();
         userRepository.deleteAll();
         user1 = userRepository.save(User.builder().name("user1").email("u1@cane.com").build());
         user2 = userRepository.save(User.builder().name("user2").email("u2@gato.com").build());

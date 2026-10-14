@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.item.repository.CommentRepository;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -26,10 +29,15 @@ public class UserServiceImplTest {
     @Autowired
     private UserService userService;
     @Autowired
-    ItemRequestRepository itemRequestRepository;
-
+    private ItemRepository itemRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    ItemRequestRepository itemRequestRepository;
 
     private User user1;
     private User user2;
@@ -38,6 +46,9 @@ public class UserServiceImplTest {
     void beforeEach() {
         user1 = User.builder().name("user1").email("u1@cane.com").build();
         user2 = User.builder().name("user2").email("u2@gato.com").build();
+        commentRepository.deleteAll();
+        bookingRepository.deleteAll();
+        itemRepository.deleteAll();
         itemRequestRepository.deleteAll();
         userRepository.deleteAll();
     }
