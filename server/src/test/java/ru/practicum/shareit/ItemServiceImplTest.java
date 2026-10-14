@@ -16,6 +16,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -40,6 +41,8 @@ public class ItemServiceImplTest {
     private BookingRepository bookingRepository;
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    ItemRequestRepository itemRequestRepository;
 
     private User user1;
     private User user2;
@@ -48,6 +51,7 @@ public class ItemServiceImplTest {
 
     @BeforeEach
     void beforeEach() {
+        itemRequestRepository.deleteAll();
         commentRepository.deleteAll();
         bookingRepository.deleteAll();
         itemRepository.deleteAll();

@@ -16,6 +16,7 @@ import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -39,6 +40,8 @@ public class BookingServiceImplTest {
     private UserRepository userRepository;
     @Autowired
     private ItemRepository itemRepository;
+    @Autowired
+    ItemRequestRepository itemRequestRepository;
 
     private User user1;
     private User user2;
@@ -49,6 +52,8 @@ public class BookingServiceImplTest {
 
     @BeforeEach
     void beforeEach() {
+        itemRequestRepository.deleteAll();
+        userRepository.deleteAll();
         user1 = userRepository.save(User.builder().name("user1").email("u1@cane.com").build());
         user2 = userRepository.save(User.builder().name("user2").email("u2@gato.com").build());
         userRepository.saveAll(List.of(user1, user2));

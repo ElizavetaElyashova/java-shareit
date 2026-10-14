@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
@@ -24,6 +25,8 @@ import static org.hamcrest.Matchers.hasSize;
 public class UserServiceImplTest {
     @Autowired
     private UserService userService;
+    @Autowired
+    ItemRequestRepository itemRequestRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -35,6 +38,7 @@ public class UserServiceImplTest {
     void beforeEach() {
         user1 = User.builder().name("user1").email("u1@cane.com").build();
         user2 = User.builder().name("user2").email("u2@gato.com").build();
+        itemRequestRepository.deleteAll();
         userRepository.deleteAll();
     }
 
