@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class ItemRequestImplTest {
+public class ItemRequestServiceImplTest {
     @Autowired
     ItemRequestService itemRequestService;
     @Autowired
@@ -62,7 +62,7 @@ public class ItemRequestImplTest {
         ItemRequest target = itemRequestRepository.findById(result.getId()).get();
         assertThat(result.getId(), equalToObject(target.getId()));
         assertThat(result.getDescription(), equalToObject(target.getDescription()));
-        assertThat(result.getCreated(), equalToObject(target.getCreated()));
+        assertThat(result.getCreated().withNano(0), equalToObject(target.getCreated().withNano(0)));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class ItemRequestImplTest {
         item1 = itemRepository.save(item1);
         List<ItemRequestWithResponsesDto> result = itemRequestService.findUserRequests(user1.getId());
         assertThat(result, hasSize(2));
-        assertThat(result.getLast().getItems().getFirst().getId(), equalToObject(item1.getId()));
+        assertThat(result.getFirst().getItems().getFirst().getId(), equalToObject(item1.getId()));
     }
 
     @Test

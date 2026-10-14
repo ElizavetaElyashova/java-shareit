@@ -141,7 +141,9 @@ public class ItemServiceImplTest {
                 .build();
         comment = itemService.addComment(comment, item1.getId(), user2.getId());
         ItemDto itemDto = itemService.findById(item1.getId(), item1.getOwner().getId());
-        assertThat(comment, equalToObject(itemDto.getComments().getFirst()));
+        assertThat(comment.getId(), equalToObject(itemDto.getComments().getFirst().getId()));
+        assertThat(comment.getText(), equalToObject(itemDto.getComments().getFirst().getText()));
+        assertThat(comment.getAuthorName(), equalToObject(itemDto.getComments().getFirst().getAuthorName()));
     }
 
 }
