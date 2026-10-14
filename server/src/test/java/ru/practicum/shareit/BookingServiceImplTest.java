@@ -65,8 +65,8 @@ public class BookingServiceImplTest {
         item2 = Item.builder().name("item2").description("cup").available(true).owner(user1).build();
         itemRepository.saveAll(List.of(item1, item2));
         booking = Booking.builder()
-                .start(LocalDateTime.now())
-                .end(LocalDateTime.now().plusSeconds(1))
+                .start(LocalDateTime.now().withNano(0))
+                .end(LocalDateTime.now().withNano(0).plusSeconds(1))
                 .item(item1)
                 .booker(user2)
                 .status(Status.WAITING)
@@ -106,8 +106,8 @@ public class BookingServiceImplTest {
     void findAll() {
         BookingDto booking1 = BookingMapper.toBookingDto(bookingRepository.save(booking));
         Booking newBooking = Booking.builder()
-                .start(LocalDateTime.now())
-                .end(LocalDateTime.now().plusSeconds(1))
+                .start(LocalDateTime.now().withNano(0))
+                .end(LocalDateTime.now().withNano(0).plusSeconds(1))
                 .item(item2)
                 .booker(user2)
                 .status(Status.WAITING)
@@ -124,8 +124,8 @@ public class BookingServiceImplTest {
     void findAllByOwner() {
         BookingDto booking1 = BookingMapper.toBookingDto(bookingRepository.save(booking));
         Booking newBooking = Booking.builder()
-                .start(LocalDateTime.now())
-                .end(LocalDateTime.now().plusSeconds(1))
+                .start(LocalDateTime.now().withNano(0))
+                .end(LocalDateTime.now().withNano(0).plusSeconds(1))
                 .item(item2)
                 .booker(user2)
                 .status(Status.WAITING)

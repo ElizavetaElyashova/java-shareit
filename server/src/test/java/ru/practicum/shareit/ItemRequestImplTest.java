@@ -70,12 +70,12 @@ public class ItemRequestImplTest {
         ItemRequest itemRequest1 = ItemRequest.builder()
                 .description("item1")
                 .requestor(user1)
-                .created(LocalDateTime.now())
+                .created(LocalDateTime.now().withNano(0))
                 .build();
         ItemRequest itemRequest2 = ItemRequest.builder()
                 .description("item2")
                 .requestor(user1)
-                .created(LocalDateTime.now())
+                .created(LocalDateTime.now().withNano(0))
                 .build();
         itemRequest1 = itemRequestRepository.save(itemRequest1);
         itemRequest2 = itemRequestRepository.save(itemRequest2);
@@ -91,12 +91,12 @@ public class ItemRequestImplTest {
         ItemRequest itemRequest1 = ItemRequest.builder()
                 .description("item1")
                 .requestor(user1)
-                .created(LocalDateTime.now())
+                .created(LocalDateTime.now().withNano(0))
                 .build();
         ItemRequest itemRequest2 = ItemRequest.builder()
                 .description("item2")
                 .requestor(user1)
-                .created(LocalDateTime.now())
+                .created(LocalDateTime.now().withNano(0))
                 .build();
         itemRequestRepository.saveAll(List.of(itemRequest1, itemRequest2));
         List<ItemRequestDto> target = Stream.of(itemRequest1, itemRequest2)
@@ -112,7 +112,7 @@ public class ItemRequestImplTest {
         ItemRequest itemRequest1 = ItemRequest.builder()
                 .description("item1")
                 .requestor(user1)
-                .created(LocalDateTime.now())
+                .created(LocalDateTime.now().withNano(0))
                 .build();
         itemRequest1 = itemRequestRepository.save(itemRequest1);
         item1 = Item.builder().name("item1").description("bike").available(true).owner(user2).requestId(itemRequest1.getId()).build();

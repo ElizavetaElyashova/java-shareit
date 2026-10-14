@@ -127,8 +127,8 @@ public class ItemServiceImplTest {
         item1.setAvailable(true);
         item1 = itemRepository.save(item1);
         Booking booking = Booking.builder()
-                .start(LocalDateTime.now())
-                .end(LocalDateTime.now().plusNanos(1))
+                .start(LocalDateTime.now().withNano(0))
+                .end(LocalDateTime.now().withNano(1))
                 .item(item1)
                 .booker(user2)
                 .status(Status.APPROVED)
@@ -137,7 +137,7 @@ public class ItemServiceImplTest {
         CommentDto comment = CommentDto.builder()
                 .text("comment")
                 .authorName(user2.getName())
-                .created(LocalDateTime.now())
+                .created(LocalDateTime.now().withNano(0))
                 .build();
         comment = itemService.addComment(comment, item1.getId(), user2.getId());
         ItemDto itemDto = itemService.findById(item1.getId(), item1.getOwner().getId());
