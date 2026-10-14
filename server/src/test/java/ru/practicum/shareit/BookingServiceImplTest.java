@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToObject;
 
-@SpringBootTest
+@SpringBootTest(classes = BookingServiceImplTest.class)
 @ActiveProfiles("test")
 @Transactional
 public class BookingServiceImplTest {

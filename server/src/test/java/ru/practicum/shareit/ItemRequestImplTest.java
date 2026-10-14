@@ -7,10 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.request.ItemRequest;
-import ru.practicum.shareit.request.ItemRequestMapper;
-import ru.practicum.shareit.request.ItemRequestRepository;
-import ru.practicum.shareit.request.ItemRequestService;
+import ru.practicum.shareit.request.*;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestWithResponsesDto;
 import ru.practicum.shareit.request.dto.NewItemRequestDto;
@@ -26,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToObject;
 import static org.hamcrest.Matchers.hasSize;
 
-@SpringBootTest
+@SpringBootTest(classes = ItemRequestServiceImpl.class)
 @ActiveProfiles("test")
 public class ItemRequestImplTest {
     @Autowired

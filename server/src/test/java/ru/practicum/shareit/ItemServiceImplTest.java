@@ -16,6 +16,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -27,7 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToObject;
 import static org.hamcrest.Matchers.hasSize;
 
-@SpringBootTest
+@SpringBootTest(classes = ItemServiceImpl.class)
 @ActiveProfiles("test")
 public class ItemServiceImplTest {
     @Autowired
