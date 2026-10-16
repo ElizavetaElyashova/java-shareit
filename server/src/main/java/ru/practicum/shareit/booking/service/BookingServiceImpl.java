@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.dto.NewBookingRequestDto;
-import ru.practicum.shareit.booking.exception.IllegalDateException;
 import ru.practicum.shareit.booking.exception.UnavailableItemException;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
@@ -35,10 +34,6 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto create(NewBookingRequestDto newBooking, long userId) {
         Item item = itemRepository.findById(newBooking.getItemId()).orElseThrow(() -> new NoSuchElementException("Вещь не найдена."));
         User booker = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("Пользователь не найден."));
-        if (newBooking.getStart().equals(newBooking.getEnd())
-                || newBooking.getStart().isAfter(newBooking.getEnd())) {
-            throw new IllegalDateException("Дата конца бронирования не может совпадать с датой начала.");
-        }
         if (!item.getAvailable()) {
             throw new UnavailableItemException("Вещь недоступна для бронирования.");
         }

@@ -48,6 +48,10 @@ public class BookingClient extends BaseClient {
 
 
     public ResponseEntity<Object> bookItem(long userId, BookItemRequestDto requestDto) {
+        if (requestDto.getStart().equals(requestDto.getEnd())
+                || requestDto.getStart().isAfter(requestDto.getEnd())) {
+            throw new IllegalDateException("Дата конца бронирования не может совпадать с датой начала.");
+        }
         return post("", userId, requestDto);
     }
 

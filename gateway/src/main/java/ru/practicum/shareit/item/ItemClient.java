@@ -38,7 +38,7 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> patchItem(long userId, long itemId, ItemDto itemDto) {
-        return post("/" + itemId, userId, itemDto);
+        return patch("/" + itemId, userId, itemDto);
     }
 
     public ResponseEntity<Object> seachItems(String text) {

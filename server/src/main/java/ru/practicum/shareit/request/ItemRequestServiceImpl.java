@@ -46,7 +46,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             requestWithResponsesDtos.add(
                     ItemRequestMapper.toItemRequestWithResponsesDto(
                             request,
-                            responsesByRequest.get(request.getId()))
+                            responsesByRequest.getOrDefault(request.getId(), List.of()))
             );
         }
         return requestWithResponsesDtos.stream().sorted(Comparator.comparing(ItemRequestWithResponsesDto::getCreated).reversed()).toList();
